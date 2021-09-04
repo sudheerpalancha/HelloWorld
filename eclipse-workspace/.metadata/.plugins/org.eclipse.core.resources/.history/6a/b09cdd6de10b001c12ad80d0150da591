@@ -1,0 +1,40 @@
+import java.util.Properties;
+
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
+
+public class sendEmail {
+    public static void main(String[] args) {
+    	final String username ="username";
+    	final String password ="password";
+    	String fromEmail ="fromemail@email.com";
+    	String toEmail ="toemail@email.com";
+    	
+    	
+    	Properties properties = new Properties();
+    	properties.put("mail.smtp.auth",true);
+    	properties.put("mail.smtp.starttls.enable","true");
+    	properties.put("mail,smtp.host","mail.smtp.gmail.com");
+    	properties.put("mail.smtp.port","587");
+    	
+    	
+    	Session session = Session.getInstance(properties,new javax.mail.Authenticator() {
+    		protected PasswordAuthentication getPasswordAuthentication() {
+    			return new PasswordAuthentication(username,password);
+    		}
+    	});
+    	
+    	MimeMessage msg = new MimeMessage(session);
+    	try {
+    	msg.setFrom(new InternateAddress(fromEmail));
+    	msg.addRecipient(Message.RecipientType.TO,new InternateAddress(toEmail));
+    	msg.setSubject("subject Line");
+    	msg.setText("Email body text");
+    	Transport.send(msg);
+    	
+    }catch (MessagingException e) {
+    	e.printStackTrace();
+    }
+}
